@@ -9,6 +9,8 @@ description: SwiftUI coding guidelines covering style, structure, patterns, form
 
 Apply these guidelines when working on SwiftUI code. Prefer minimal, readable, and maintainable changes with explicit, testable state transitions.
 
+Use `swift-coding-guideline` as the baseline for cross-cutting Swift language/tooling rules (import hygiene, mutation semantics, enum/file rules, naming, and general formatting). This skill defines SwiftUI- and UI-architecture-specific rules on top of that baseline.
+
 ## Priorities (In Order)
 
 1) Minimal changes that solve the problem directly.  
@@ -75,10 +77,8 @@ View (SwiftUI)
 ViewModel
 - Own state and orchestration.
 - Side effects must be explicit methods.
-- `private(set)` is conditional, not default.
-- Use `private(set)` only when mutation methods add real behavior.
-- Do not use `private(set)` when mutators are no-op wrappers around direct assignment.
 - Use `final class` by default; only use `class` when subclassing is required.
+- Follow `swift-coding-guideline` for mutation semantics (`private(set)`, no-op mutator wrappers, and accessor/observer constraints).
 
 Controller / Dispatcher
 - Pure transformations only.
@@ -124,74 +124,6 @@ Store
 Service
 - IO boundary (filesystem, watchers, dialogs).
 - Single-purpose; easy to stub in tests.
-
-## State & Side Effects
-
-- No app-authored `get` / `set` / `willSet` / `didSet` on properties.
-- No computed property setters in app-authored code.
-- No hidden state transitions; mutations should be explicit methods when logic is required.
-- No no-op mutator wrappers that only assign a value.
-- If assignment is plain state replacement, allow direct assignment.
-
-### Scope Clarification
-
-- The bans on `get`/`set`/`willSet`/`didSet` apply to property accessor code written in app source.
-- Framework-managed property wrappers (`@State`, `@Published`, `@AppStorage`, `@Environment`, and related wrappers) are allowed.
-- Wrapper-driven framework behavior is acceptable; avoid handwritten accessor/observer boilerplate in app code.
-
-## UserDefaults Keys (No Collisions)
-
-- Centralize keys in one place with namespacing.
-- Never inline string keys inside stores.
-- Exception to the enum dedicated-file rule: `UserDefaultsKeys` may be a single root enum with nested enums in one file to make key-collision audits easier. This exception is unique and must not be reused for other enums.
-
-Example
-```swift
-enum UserDefaultsKeys {
-
-    enum DirectoryStore {
-
-        private static let identifier = "readmarkdown.directory"
-
-        static let lastSelectedDirectory = "\(identifier).lastSelectedDirectory"
-    }
-
-    enum SettingsStore {
-
-        private static let identifier = "readmarkdown.settings"
-
-        static let scanMode = "\(identifier).scanMode"
-    }
-}
-```
-
-## Store Example (Thin Persistence)
-
-```swift
-struct SettingsStore {
-
-    private let defaults: UserDefaults
-
-    init(defaults: UserDefaults = .standard) {
-        self.defaults = defaults
-    }
-
-    func loadScanMode() -> ScanMode {
-        guard
-            let raw = defaults.string(forKey: UserDefaultsKeys.SettingsStore.scanMode),
-            let mode = ScanMode(rawValue: raw)
-        else {
-            return .full
-        }
-
-        return mode
-    }
-
-    func saveScanMode(_ mode: ScanMode) {
-        defaults.set(mode.rawValue, forKey: UserDefaultsKeys.SettingsStore.scanMode)
-    }
-}
-```
 
 ## Pure Transformations
 
@@ -288,16 +220,10 @@ final class StubFileScannerService {
 - Use comments only to clarify intent, not to restate code.
 - Prefer computed properties over local `let` declarations inside SwiftUI view-building closures for derived values that are reused or improve readability.
 - For view subtrees, prefer dedicated `View` types in their own files over computed properties.
-- File doc comments must list a real human author in the "Created by" line and include the date, formatted like: "Created by Martin Lasek on 18/01/2026."
-- When creating new files, set the "Created by" date to the current date.
-- Preserve existing human authorship lines (e.g., keep "emin" if already present) unless the user explicitly asks to change them.
-- Default to ASCII and match existing style.
 - Formatting preference: place attributes and modifiers on their own lines for clarity.
 - Property wrappers should be on their own line, not inline with the property declaration (e.g., `@EnvironmentObject` on a separate line).
 - Add a blank line between consecutive stored properties when either property uses a property wrapper or attribute (e.g., `@Published`, `@State`, `@EnvironmentObject`). Treat this as a strict formatting rule.
 - Formatting preference: add a blank line after type declarations before the first member.
-- All models must use the `Model` suffix for consistency (e.g., `MarkdownFileModel`).
-- Enums that represent configuration or view state can omit the `Model` suffix (e.g., `ScanMode`).
 
 Example
 ```swift
@@ -360,21 +286,6 @@ private var terminalBottomInset: CGFloat {
     showsTerminal ? terminalHeight + terminalPadding * 2 : 0
 }
 ```
-
-## Guard Formatting
-
-Use multi-line and aligned `guard` statements for multi-condition checks.
-
-Example
-```swift
-guard
-    let raw = defaults.string(forKey: UserDefaultsKeys.SettingsStore.scanMode),
-    let mode = ScanMode(rawValue: raw)
-else {
-    return .full
-}
-```
-
 
 ## What to Avoid
 

@@ -1,6 +1,6 @@
 ---
 name: swift-coding-guideline
-description: Swift development workflows for Xcode and Swift tooling, including project setup, dependency management, concurrency guidance, language/runtime best practices, and troubleshooting build or package resolution issues. Use when working on Swift development tasks that are not UI-specific, such as package configuration, project file edits, tooling usage, or runtime behavior.
+description: Core Swift development workflows for Xcode and Swift tooling, including project setup, dependency management, concurrency guidance, language/runtime best practices, and troubleshooting build or package resolution issues. Use when working on Swift tasks across a codebase, especially package/tooling/runtime work and cross-cutting Swift conventions (mutation semantics, naming, enum/file rules, import hygiene), including in SwiftUI projects.
 ---
 
 # Swift Development Guide Skill
@@ -60,27 +60,24 @@ Core Rules
 - Use `private(set)` only when mutation must be controlled by methods that add real behavior.
 - If assignment is plain state replacement, do not use `private(set)` to force wrapper methods.
 
-3) Pass-through `Binding(get:set:)` is always a violation.
-- If `get` reads `x` and `set` only writes `x = newValue`, do not use `Binding(get:set:)`.
-- Use direct bindings for plain state.
-- Use `Binding(get:set:)` only when `set` performs intentional behavior.
-
-4) App-authored property accessors/observers are forbidden.
+3) App-authored property accessors/observers are forbidden.
 - Do not write explicit property `get` / `set` accessors.
 - Do not use `willSet` / `didSet` observers.
 
-5) Computed properties are getter-only and pure.
+4) Computed properties are getter-only and pure.
 - Computed properties must not declare setters.
 - Getter-only computed properties must not mutate state.
 - Getter-only computed properties must not cause side effects (for example logging, I/O, persistence, fixups).
 
-6) Semantics by construct.
+5) Semantics by construct.
 - Properties should be nouns (state/value).
 - Methods should be verbs (actions/mutations).
 
 Scope Clarification
 - The accessor/observer bans apply to property code written in app source.
 - Framework-managed wrappers (for example `@State`, `@Published`, `@AppStorage`, `@Environment`) are allowed.
+
+SwiftUI-specific binding guidance (`Binding(get:set:)` pass-through bans and view-binding patterns) belongs in `swiftui-coding-guideline`.
 
 Bad
 ```swift
@@ -218,6 +215,12 @@ if
 
 Do not use underscores in function names or property names. Swift naming should be lowerCamelCase without underscores (e.g., `loadUserProfile`, not `load_user_profile`).
 
+## Model Naming Rule (Mandatory)
+
+All model types must use the `Model` suffix for consistency (e.g., `MarkdownFileModel`).
+
+Enums that represent configuration or view state can omit the `Model` suffix (e.g., `ScanMode`).
+
 ## Reserved Term Rule (Mandatory)
 
 Never use the name `coordinator` for types, variables, properties, functions, protocol names, file names, or architecture roles.
@@ -252,3 +255,11 @@ enum Foo {
     case b
 }
 ```
+
+## File Header Rule (Mandatory)
+
+File doc comments must list a real human author in the "Created by" line and include the date, formatted like: "Created by Martin Lasek on 18/01/2026."
+
+When creating new files, set the "Created by" date to the current date.
+
+Preserve existing human authorship lines (e.g., keep "emin" if already present) unless the user explicitly asks to change them.

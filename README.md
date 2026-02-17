@@ -16,47 +16,30 @@ Use this directly in Codex chat:
 
 Then restart Codex to load newly installed skills.
 
-### Included Skills
+## Skills
 
-- `swift-coding-guideline`: Swift/Xcode/SwiftPM workflows, runtime and concurrency guidance, and non-UI architecture rules.
-- `swiftui-coding-guideline`: SwiftUI architecture, layering, state management, formatting, and pure-function patterns.
+### ⚙️ Swift Coding Guideline
 
-## swift-coding-guideline
+**Purpose**: Apply core Swift engineering rules across Xcode, SwiftPM, runtime behavior, and codebase conventions.
 
-### Purpose
+**Key Features**:
+- SwiftPM and package-resolution workflow guidance
+- Runtime and concurrency-oriented guardrails
+- Cross-cutting Swift rules for naming, enum organization, import hygiene, and mutation semantics
+- Strong folder conventions for Model, Store, and Shared boundaries
 
-Guide Swift development tasks that are not UI-specific, including tooling, package setup, project structure, and runtime behavior.
+**Use When**: You are working on non-UI Swift tasks, package/tooling issues, runtime behavior, or enforcing global Swift code conventions.
 
-### Key Rules
+---
 
-- Keep changes minimal and scoped.
-- Use focused `references/` docs based on the task.
-- Keep persistence adapters in `Store/`.
-- Keep enums in dedicated files (with the documented `UserDefaultsKeys` exception).
-- Enforce import hygiene and explicit mutation semantics.
+### 🧩 SwiftUI Coding Guideline
 
-### Use When
+**Purpose**: Apply SwiftUI-specific architecture and formatting rules for maintainable views, view models, and UI-layer boundaries.
 
-- Editing `Package.swift` or resolving package issues.
-- Making non-UI Swift architecture or runtime changes.
-- Applying strict codebase conventions for models, stores, enums, and naming.
+**Key Features**:
+- Clear layer boundaries across View, ViewModel, Controller, Dispatcher, Service, and Store
+- SwiftUI-first view composition rules (standalone view files, no subtree computed views)
+- Binding guidance to avoid pass-through `Binding(get:set:)`
+- UI-focused formatting rules for wrappers, attributes, and view-building readability
 
-## swiftui-coding-guideline
-
-### Purpose
-
-Apply strict SwiftUI coding standards for view architecture, layering, state transitions, and maintainable formatting.
-
-### Key Rules
-
-- Keep views UI-only and side effects explicit.
-- Keep controllers/dispatchers pure (no IO).
-- Use services for IO boundaries and stores for persistence only.
-- Avoid pass-through `Binding(get:set:)`.
-- Favor minimal and testable changes with clear responsibilities.
-
-### Use When
-
-- Creating or refactoring SwiftUI views and view models.
-- Enforcing architecture boundaries across View, ViewModel, Controller, Dispatcher, Service, and Store.
-- Normalizing SwiftUI formatting and property-wrapper style.
+**Use When**: You are creating or refactoring SwiftUI views/view models and need strict UI architecture, binding, and formatting consistency.
