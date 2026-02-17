@@ -1,4 +1,4 @@
-# Skills
+# Public Codex Skills
 
 Public Codex skills by Martin Lasek.
 
