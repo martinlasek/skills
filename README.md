@@ -34,7 +34,7 @@ Install multiple specific skills:
 ./install.sh swift-coding-guideline swiftui-coding-guideline
 ```
 
-**Then restart Codex to load newly installed skills.**
+Then restart Codex to load newly installed skills. 🚀
 
 What `install.sh` does:
 - Ensures `~/.codex/skills` exists.
