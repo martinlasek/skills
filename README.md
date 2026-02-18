@@ -64,7 +64,7 @@ What `install.sh` does:
 **Key Features**:
 - Clear layer boundaries across View, ViewModel, Controller, Dispatcher, Service, and Store
 - SwiftUI-first view composition rules (standalone view files, no subtree computed views)
-- Binding guidance to avoid pass-through `Binding(get:set:)`
+- Rules to avoid implicit state execution (`get`/`set`/`willSet`/`didSet`, including pass-through `Binding(get:set:)`)
 - UI-focused formatting rules for wrappers, attributes, and view-building readability
 
 **Use When**: You are creating or refactoring SwiftUI views/view models and need strict UI architecture, binding, and formatting consistency.
