@@ -6,13 +6,38 @@ Public Codex skills by Martin Lasek.
 
 This repository contains installable Codex skills focused on Swift and SwiftUI engineering quality.
 
-### Install (Our Recommended Way)
+### Install
 
-Use this directly in Codex chat:
+Clone the repository and run the installer:
 
-`$skill-installer install https://github.com/martinlasek/skills/tree/main/swift-coding-guideline`
+```bash
+git clone https://github.com/martinlasek/skills.git
+cd skills
+./install.sh
+```
 
-`$skill-installer install https://github.com/martinlasek/skills/tree/main/swiftui-coding-guideline`
+What `install.sh` does:
+- Ensures `~/.codex/skills` exists.
+- Backs up existing installed versions with a timestamp before replacing them.
+- Installs all skills by default, or only selected skills when names are provided.
+
+Install all skills:
+
+```bash
+./install.sh
+```
+
+Install one specific skill:
+
+```bash
+./install.sh swift-coding-guideline
+```
+
+Install multiple specific skills:
+
+```bash
+./install.sh swift-coding-guideline swiftui-coding-guideline
+```
 
 Then restart Codex to load newly installed skills.
 
