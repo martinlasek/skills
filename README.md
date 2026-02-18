@@ -16,11 +16,6 @@ cd skills
 ./install.sh
 ```
 
-What `install.sh` does:
-- Ensures `~/.codex/skills` exists.
-- Backs up existing installed versions with a timestamp before replacing them.
-- Installs all skills by default, or only selected skills when names are provided.
-
 Install all skills:
 
 ```bash
@@ -40,6 +35,11 @@ Install multiple specific skills:
 ```
 
 Then restart Codex to load newly installed skills.
+
+What `install.sh` does:
+- Ensures `~/.codex/skills` exists.
+- Backs up existing installed versions with a timestamp before replacing them.
+- Installs all skills by default, or only selected skills when names are provided.
 
 ## Skills
 
